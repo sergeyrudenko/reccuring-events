@@ -1,0 +1,22 @@
+{
+    "name": "default",
+    "type": "postgres",
+    "extra": {
+        "connectionLimit": 60
+    },
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "postgres",
+    "database": "reccuring-events",
+    "maxQueryExecutionTime": 100,
+    "retryAttempts": 100000,
+    "entities": ["dist/modules/**/*.entity{.ts,.js}"],
+    "migrations": ["dist/migrations/*{.ts,.js}"],
+    "synchronize": false,
+    "charset": "utf8mb4",
+    "logging": ["error"],
+    "cli": {
+        "migrationsDir": "migration"
+    }
+}
