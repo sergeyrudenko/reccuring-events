@@ -1,15 +1,13 @@
-'use strict';
-
 import {
+    Column,
     CreateDateColumn,
+    Entity,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 
-import { UtilsService } from '../providers/utils.service';
-import { AbstractDto } from './dto/AbstractDto';
-
-export abstract class AbstractEntity<T extends AbstractDto = AbstractDto> {
+@Entity({ name: 'events' })
+export class EventEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -25,9 +23,13 @@ export abstract class AbstractEntity<T extends AbstractDto = AbstractDto> {
     })
     updatedAt: Date;
 
-    abstract dtoClass: new (entity: AbstractEntity, options?: any) => T;
+    @Column({
+        nullable: false,
+        name: 'start_date',
+        type: 'timestamp without time zone',
+    })
+    startDate: Date;
 
-    toDto(options?: any) {
-        return UtilsService.toDto(this.dtoClass, this, options);
-    }
+    @Column({ nullable: true, name: 'frequency', type: 'interval' })
+    frequency: string;
 }

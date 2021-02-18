@@ -2,10 +2,9 @@
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
-import { AbstractDto } from '../../../common/dto/AbstractDto';
 import { UserEntity } from '../user.entity';
 
-export class UserDto extends AbstractDto {
+export class UserDto {
     @ApiPropertyOptional()
     firstName: string;
 
@@ -22,10 +21,8 @@ export class UserDto extends AbstractDto {
     phone: string;
 
     constructor(user: UserEntity) {
-        super(user);
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.email = user.email;
-        this.phone = user.phone;
     }
 }

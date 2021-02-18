@@ -1,24 +1,34 @@
-import { Column, Entity } from 'typeorm';
-
-import { AbstractEntity } from '../../common/abstract.entity';
-import { UserDto } from './dto/UserDto';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
-export class UserEntity extends AbstractEntity<UserDto> {
-    @Column({ nullable: true })
+export class UserEntity {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @CreateDateColumn({
+        type: 'timestamp without time zone',
+        name: 'created_at',
+    })
+    createdAt: Date;
+
+    @UpdateDateColumn({
+        type: 'timestamp without time zone',
+        name: 'updated_at',
+    })
+    updatedAt: Date;
+
+    @Column({ nullable: false, name: 'first_name' })
     firstName: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: false, name: 'last_name' })
     lastName: string;
 
-    @Column({ unique: true, nullable: true })
+    @Column({ unique: true, nullable: false, name: 'email' })
     email: string;
-
-    @Column({ nullable: true })
-    password: string;
-
-    @Column({ nullable: true })
-    phone: string;
-
-    dtoClass = UserDto;
 }
