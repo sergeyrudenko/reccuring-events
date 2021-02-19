@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/tslint/config */
-/* eslint-disable @typescript-eslint/naming-convention */
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class addedUsersAndEvents1613665558698 implements MigrationInterface {

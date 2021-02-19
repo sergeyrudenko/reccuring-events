@@ -1,8 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
-import { SnakeNamingStrategy } from '../../snake-naming.strategy';
-
 export class ConfigService {
     constructor() {
         const nodeEnv = this.nodeEnv;
@@ -78,7 +76,6 @@ export class ConfigService {
             database: this.get('DB_DATABASE'),
             migrationsRun: true,
             logging: this.nodeEnv === 'development',
-            namingStrategy: new SnakeNamingStrategy(),
         };
     }
 }

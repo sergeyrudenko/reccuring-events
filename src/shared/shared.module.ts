@@ -2,9 +2,8 @@ import { Global, HttpModule, Module } from '@nestjs/common';
 
 import { ConfigService } from './services/config.service';
 import { GeneratorService } from './services/generator.service';
-import { ValidatorService } from './services/validator.service';
 
-const providers = [ConfigService, ValidatorService, GeneratorService];
+const providers = [ConfigService, GeneratorService];
 
 @Global()
 @Module({

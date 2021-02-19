@@ -11,7 +11,7 @@
         "start:dev": "ts-node src/main.ts",
         "start:prod": "node dist/main.js",
         "typeorm": "ts-node node_modules/typeorm/cli.js  -f ormconfig",
-        "migration:generate": "node node_modules/typeorm/cli.js -f ormconfig2.json migration:generate -d src/migrations -n",
+        "migration:generate": "npm run build:prod && node node_modules/typeorm/cli.js -f ormconfig2.json migration:generate -d src/migrations -n",
         "migration:create": "npm run typeorm migration:create -d src/migrations -n",
         "migration:revert": "npm run typeorm migration:revert",
         "schema:drop": "npm run typeorm schema:drop",

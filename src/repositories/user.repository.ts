@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { EntityRepository } from 'typeorm/decorator/EntityRepository';
 
-import { UserEntity } from '../modules/user/user.entity';
+import { UserEntity } from '../modules/user/entities/user.entity';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
