@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
@@ -9,6 +10,8 @@ import {
 } from 'typeorm';
 
 import { Frequency } from '../../../constants/frequencies';
+import { CompanyEntity } from '../../company/entities/company.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { EventFrequencyEntity } from './event-frequency.entity';
 
 @Entity({ name: 'events' })
@@ -48,4 +51,26 @@ export class EventEntity {
 
   @RelationId((event: EventEntity) => event.frequency)
   readonly frequencyId: Frequency;
+
+  @ManyToOne(() => UserEntity, (user) => user.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'user_id' })
+  user?: UserEntity;
+
+  @RelationId((eventRelation: EventEntity) => eventRelation.user)
+  readonly userId: string | null;
+
+  @ManyToOne(() => CompanyEntity, (company) => company.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'company_id' })
+  company?: CompanyEntity;
+
+  @RelationId((eventRelation: EventEntity) => eventRelation.company)
+  readonly companyId: string | null;
 }

@@ -18,7 +18,6 @@ import { HttpExceptionFilter } from './filters/bad-request.filter';
 import { QueryFailedFilter } from './filters/query-failed.filter';
 import { ConfigService } from './shared/services/config.service';
 import { SharedModule } from './shared/shared.module';
-import { setupSwagger } from './viveo-swagger';
 
 async function bootstrap() {
     initializeTransactionalContext();
@@ -60,10 +59,6 @@ async function bootstrap() {
     );
 
     const configService = app.select(SharedModule).get(ConfigService);
-
-    if (['development', 'staging'].includes(configService.nodeEnv)) {
-        setupSwagger(app);
-    }
 
     const port = configService.getNumber('PORT');
     await app.listen(port);

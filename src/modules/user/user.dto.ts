@@ -1,24 +1,17 @@
 /* eslint-disable max-classes-per-file */
 'use strict';
 
-import { ApiPropertyOptional } from '@nestjs/swagger';
-
 import { UserEntity } from './entities/user.entity';
 
 export class UserDto {
-  @ApiPropertyOptional()
   firstName: string;
 
-  @ApiPropertyOptional()
   lastName: string;
 
-  @ApiPropertyOptional()
   username: string;
 
-  @ApiPropertyOptional()
   email: string;
 
-  @ApiPropertyOptional()
   phone: string;
 
   constructor(user: UserEntity) {

@@ -28,4 +28,9 @@ export class EventRepository extends Repository<EventEntity> {
 
     await this.update(eventId, updateData);
   }
+
+  public async getById(eventId: string): Promise<EventEntity> {
+    const [event] = await this.findByIds([eventId]);
+    return event;
+  }
 }
