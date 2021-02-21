@@ -192,10 +192,6 @@ module.exports = {
     'import/no-deprecated': 'warn',
     'import/no-internal-modules': 'off',
     'import/order': 'off',
-    'max-classes-per-file': [
-      'error',
-      1,
-    ],
     'max-len': [
       'error',
       {

@@ -9,15 +9,15 @@ export class EventInstanceExceptionRepository extends Repository<EventInstanceEx
   public async createAndInsert(
     eventId: string,
     createData: {
-      exceptionDates: Date[];
+      exceptionDate: Date;
       exceptionTypeId: InstanceExceptionType;
-    },
+    }[],
   ): Promise<void> {
     const instanceExceptions = this.create(
-      createData.exceptionDates.map((ed) => ({
-        exceptionDate: ed,
+      createData.map((ed) => ({
+        exceptionDate: ed.exceptionDate,
         event: { id: eventId },
-        exceptionType: { id: createData.exceptionTypeId },
+        exceptionType: { id: ed.exceptionTypeId },
       })),
     );
     await this.createQueryBuilder()

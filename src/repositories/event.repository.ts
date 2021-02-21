@@ -11,7 +11,7 @@ export class EventRepository extends Repository<EventEntity> {
     eventId: string,
     updateEventData: {
       startDate?: Date;
-      frequenceId?: Frequency;
+      frequencyId?: Frequency;
     },
   ): Promise<void> {
     const updateData: QueryDeepPartialEntity<EventEntity> = {};
@@ -20,9 +20,9 @@ export class EventRepository extends Repository<EventEntity> {
       updateData.startDate = updateEventData.startDate;
     }
 
-    if (updateEventData.frequenceId) {
+    if (updateEventData.frequencyId) {
       updateData.frequency = {
-        id: updateEventData.frequenceId,
+        id: updateEventData.frequencyId,
       };
     }
 

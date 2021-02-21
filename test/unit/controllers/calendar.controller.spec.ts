@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 
+import { InstanceExceptionType } from '../../../src/constants/instance-exception-types';
 import { CalendarController } from '../../../src/modules/calendar/calendar.controller';
 import { CalendarService } from '../../../src/modules/calendar/callendar.service';
 import { UserService } from '../../../src/modules/user/user.service';
@@ -61,8 +62,16 @@ describe('CalendarController (unit)', () => {
       const currentDate = new Date();
       await calendarController.changeEventDate({
         eventId: 'event-id',
-        newInstanceDates: [123, 123],
-        cancelInstanceDates: [123, 123],
+        exceptions: [
+          {
+            date: 123,
+            typeId: InstanceExceptionType.EXCLUSION,
+          },
+          {
+            date: 123,
+            typeId: InstanceExceptionType.INCLUSION,
+          },
+        ],
         startDate: currentDate.toISOString(),
       });
 
@@ -72,7 +81,7 @@ describe('CalendarController (unit)', () => {
       expect(getEventById).toBeCalledWith('event-id');
       expect(getEventById).toBeCalledTimes(1);
 
-      expect(createEventInstanceException).toBeCalledTimes(2);
+      expect(createEventInstanceException).toBeCalledTimes(1);
 
       expect(updateEventById).toBeCalledWith('event-id', {
         startDate: currentDate,

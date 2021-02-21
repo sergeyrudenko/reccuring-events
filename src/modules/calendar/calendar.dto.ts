@@ -1,27 +1,33 @@
 import {
-  IsDate,
   IsDateString,
   IsDefined,
+  IsIn,
   IsNumber,
   IsOptional,
   IsUUID,
+  ValidateNested,
 } from 'class-validator';
 
-import { IUpdateEvent } from './calendar.interface';
+import { InstanceExceptionType } from '../../constants/instance-exception-types';
+import { ICreateEventInstances, IUpdateEvent } from './calendar.interface';
 
+class EventInstanceExceptionDto implements ICreateEventInstances {
+  @IsDefined()
+  @IsIn([InstanceExceptionType.EXCLUSION, InstanceExceptionType.INCLUSION])
+  typeId: InstanceExceptionType;
+
+  @IsDefined()
+  @IsNumber()
+  date: number;
+}
 export class UpdateEventDto implements IUpdateEvent {
   @IsDefined()
   @IsUUID()
   eventId: string;
 
   @IsOptional()
-  @IsNumber({}, { each: true })
-  cancelInstanceDates?: number[];
-
-  @IsOptional()
-  @IsNumber({}, { each: true })
-  @IsDate({ each: true })
-  newInstanceDates?: number[];
+  @ValidateNested()
+  exceptions?: EventInstanceExceptionDto[];
 
   @IsOptional()
   @IsDateString()

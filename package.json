@@ -3,7 +3,6 @@
     "version": "7.0.1",
     "description": "calendar with reccuring events",
     "author": "Serhii Rudenko",
-    "license": "MIT",
     "scripts": {
         "build:prod": "rm -rf dist && tsc -p tsconfig.build.json",
         "postbuild:prod": "copyfiles --up 1 src/**/*.json dist",

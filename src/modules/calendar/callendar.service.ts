@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
-import { InstanceExceptionType } from '../../constants/instance-exception-types';
 import { EventInstanceExceptionRepository } from '../../repositories/event-instance-exception.repository';
 import { EventRepository } from '../../repositories/event.repository';
-import { IUpdateEvent } from './calendar.interface';
+import {
+  ICalendarService,
+  ICreateEventInstances,
+  IUpdateEvent,
+} from './calendar.interface';
 import { EventEntity } from './entities/event.entity';
 
 @Injectable()
-export class CalendarService /* implements ICalendarService */ {
+export class CalendarService implements ICalendarService {
   constructor(
     private readonly _eventRepository: EventRepository,
     private readonly _eventInstanceExceptionRepository: EventInstanceExceptionRepository,
@@ -17,12 +20,7 @@ export class CalendarService /* implements ICalendarService */ {
     event: EventEntity,
     updateData: IUpdateEvent,
   ): Promise<void> {
-    const {
-      eventId,
-      cancelInstanceDates,
-      newInstanceDates,
-      startDate,
-    } = updateData;
+    const { eventId, exceptions, startDate } = updateData;
 
     if (startDate) {
       await this._eventRepository.updateById(eventId, {
@@ -30,34 +28,23 @@ export class CalendarService /* implements ICalendarService */ {
       });
     }
 
-    await this._createEventInstanceExceptionsIfNeed(
-      event.id,
-      cancelInstanceDates,
-      InstanceExceptionType.EXCLUSION,
-    );
-
-    await this._createEventInstanceExceptionsIfNeed(
-      event.id,
-      newInstanceDates,
-      InstanceExceptionType.INCLUSION,
-    );
+    if (exceptions) {
+      await this._createEventInstanceExceptions(event.id, exceptions);
+    }
   }
 
-  private async _createEventInstanceExceptionsIfNeed(
+  private async _createEventInstanceExceptions(
     eventId: string,
-    timestampDates: number[],
-    typeId: InstanceExceptionType,
+    exceptionData: ICreateEventInstances[],
   ): Promise<void> {
-    if (timestampDates && timestampDates.length !== 0) {
-      const prepareInstanceExceptionDate = {
-        exceptionDates: timestampDates.map((cid) => new Date(cid * 1000)),
-        exceptionTypeId: typeId,
-      };
-      await this._eventInstanceExceptionRepository.createAndInsert(
-        eventId,
-        prepareInstanceExceptionDate,
-      );
-    }
+    const preparedInstanceExceptionDate = exceptionData.map((ed) => ({
+      exceptionDate: new Date(ed.date * 1000),
+      exceptionTypeId: ed.typeId,
+    }));
+    await this._eventInstanceExceptionRepository.createAndInsert(
+      eventId,
+      preparedInstanceExceptionDate,
+    );
   }
 
   public getEventById(eventId: string): Promise<EventEntity> {
