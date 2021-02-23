@@ -18,7 +18,7 @@ export class initial1613736332758 implements MigrationInterface {
       `CREATE TABLE "users" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "email" character varying NOT NULL, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "events" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "start_date" TIMESTAMP NOT NULL, "frequencyId" integer NOT NULL, "user_id" uuid, "company_id" uuid, CONSTRAINT "PK_40731c7151fe4be3116e45ddf73" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "events" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "start_date" TIMESTAMP NOT NULL, "frequency_id" integer NOT NULL, "user_id" uuid, "company_id" uuid, CONSTRAINT "PK_40731c7151fe4be3116e45ddf73" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "event_instance_exceptions" ("exception_date" TIMESTAMP NOT NULL, "exception_type_id" smallint NOT NULL, "event_id" uuid NOT NULL, CONSTRAINT "PK_34552b2757bcb6664170365559a" PRIMARY KEY ("exception_date", "event_id"))`,
@@ -28,7 +28,7 @@ export class initial1613736332758 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `ALTER TABLE "events" ADD CONSTRAINT "FK_3f7134cb57dbdc4af7c08a77d39" FOREIGN KEY ("frequencyId") REFERENCES "event_frequencies"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
+      `ALTER TABLE "events" ADD CONSTRAINT "FK_3f7134cb57dbdc4af7c08a77d39" FOREIGN KEY ("frequency_id") REFERENCES "event_frequencies"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
     );
     await queryRunner.query(
       `ALTER TABLE "events" ADD CONSTRAINT "FK_09f256fb7f9a05f0ed9927f406b" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE`,

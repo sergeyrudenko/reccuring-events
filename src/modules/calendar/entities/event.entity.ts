@@ -47,6 +47,7 @@ export class EventEntity {
       nullable: false,
     },
   )
+  @JoinColumn({ name: 'frequency_id' })
   frequency?: EventFrequencyEntity;
 
   @RelationId((event: EventEntity) => event.frequency)

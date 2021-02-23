@@ -7,6 +7,7 @@ import { UserService } from '../../../src/modules/user/user.service';
 import { EventInstanceExceptionRepository } from '../../../src/repositories/event-instance-exception.repository';
 import { EventRepository } from '../../../src/repositories/event.repository';
 import { UserRepository } from '../../../src/repositories/user.repository';
+import { userSeed } from '../../../src/seeds/user';
 
 jest.mock('../../../src/repositories/user.repository');
 jest.mock('../../../src/repositories/event.repository');
@@ -75,7 +76,7 @@ describe('CalendarController (unit)', () => {
         startDate: currentDate.toISOString(),
       });
 
-      expect(getUserById).toBeCalledWith('user-id');
+      expect(getUserById).toBeCalledWith(userSeed.id);
       expect(getUserById).toBeCalledTimes(1);
 
       expect(getEventById).toBeCalledWith('event-id');

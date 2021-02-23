@@ -8,7 +8,7 @@
     "port": 5432,
     "username": "postgres",
     "password": "postgres",
-    "database": "reccuring-events",
+    "database": "calendar",
     "maxQueryExecutionTime": 100,
     "retryAttempts": 100000,
     "entities": ["dist/modules/**/*.entity{.ts,.js}"],

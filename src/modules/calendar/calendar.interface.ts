@@ -1,4 +1,3 @@
-import { Frequency } from '../../constants/frequencies';
 import { InstanceExceptionType } from '../../constants/instance-exception-types';
 import { EventEntity } from './entities/event.entity';
 
@@ -11,13 +10,6 @@ export interface IUpdateEvent {
   startDate?: string;
   exceptions?: ICreateEventInstances[];
 }
-export interface ICreateEvent {
-  eventId: string;
-  cancelInstanceDates?: number[];
-  newInstanceDates?: number[];
-  startDate: string;
-  frequencyId: Frequency;
-}
 
 export interface ICalendarService {
   changeEvent(event: EventEntity, updateData: IUpdateEvent): Promise<void>;
@@ -27,4 +19,9 @@ export interface ICalendarService {
   //   createEvent(createData: ICreateEvent): Promise<EventEntity>;
   //   removeEvent(eventId: string): Promise<void>;
   //   handleEventInstance(eventId: string, startDate: Date): Promise<void>;
+}
+
+export interface IEventInstance {
+  eventId: string;
+  instanceTimestamp: number;
 }

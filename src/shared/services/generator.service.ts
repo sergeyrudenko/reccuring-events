@@ -3,7 +3,7 @@ import { v1 as uuid } from 'uuid';
 
 @Injectable()
 export class GeneratorService {
-    public uuid(): string {
-        return uuid();
-    }
+  public uuid(): string {
+    return uuid();
+  }
 }

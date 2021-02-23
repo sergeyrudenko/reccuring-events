@@ -25,4 +25,35 @@ export class EventInstanceExceptionRepository extends Repository<EventInstanceEx
       .values(instanceExceptions)
       .execute();
   }
+
+  public async getInPeriod(
+    eventIds: string[],
+    dateFrom: Date,
+    dateTo: Date,
+  ): Promise<
+    {
+      eventId: string;
+      exceptionDate: number;
+      exceptionTypeId: InstanceExceptionType;
+    }[]
+  > {
+    const transformDateToTimestamp = (date: Date): number =>
+      date.getTime() / 1000;
+
+    const dateToTimestamp = transformDateToTimestamp(dateTo);
+    const dateFromTimestamp = transformDateToTimestamp(dateFrom);
+
+    const eventInstances = await this.createQueryBuilder('eie')
+      .where('eie.event_id IN (:eventIds)', { eventIds })
+      .andWhere(
+        'eie.exception_date between :dateToTimestamp and :dateFromTimestamp ',
+        { dateFromTimestamp, dateToTimestamp },
+      )
+      .getMany();
+    return eventInstances.map((ei) => ({
+      eventId: ei.eventId,
+      exceptionDate: transformDateToTimestamp(ei.exceptionDate),
+      exceptionTypeId: ei.exceptionTypeId,
+    }));
+  }
 }

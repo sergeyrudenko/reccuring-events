@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import * as _ from 'lodash';
 
+import { InstanceExceptionType } from '../../constants/instance-exception-types';
 import { EventInstanceExceptionRepository } from '../../repositories/event-instance-exception.repository';
 import { EventRepository } from '../../repositories/event.repository';
 import {
   ICalendarService,
   ICreateEventInstances,
+  IEventInstance,
   IUpdateEvent,
 } from './calendar.interface';
 import { EventEntity } from './entities/event.entity';
@@ -49,5 +52,46 @@ export class CalendarService implements ICalendarService {
 
   public getEventById(eventId: string): Promise<EventEntity> {
     return this._eventRepository.getById(eventId);
+  }
+
+  public async getEventInstancesInPeriod(
+    userId: string,
+    dateFrom: Date,
+    dateTo: Date,
+  ): Promise<IEventInstance[]> {
+    const eventInstances = await this._eventRepository.getGeneratedInstancesInPeriod(
+      userId,
+      dateFrom,
+      dateTo,
+    );
+    const eventsExceptions = await this._eventInstanceExceptionRepository.getInPeriod(
+      eventInstances.map((e) => e.eventId),
+      dateFrom,
+      dateTo,
+    );
+
+    const [
+      exceptionToInclude,
+      exceptionToExclude,
+    ] = _.partition(eventsExceptions, [
+      'exceptionTypeId',
+      InstanceExceptionType.INCLUSION,
+    ]);
+
+    const eventInstancesWithExcludedExceptions = eventInstances.filter((ei) =>
+      exceptionToExclude.find(
+        (etx) =>
+          etx.eventId === ei.eventId &&
+          etx.exceptionDate === ei.instanceTimestamp,
+      ),
+    );
+
+    return [
+      ...eventInstancesWithExcludedExceptions,
+      ...exceptionToInclude.map((ei) => ({
+        eventId: ei.eventId,
+        instanceTimestamp: ei.exceptionDate,
+      })),
+    ].sort((a, b) => a.instanceTimestamp - b.instanceTimestamp);
   }
 }

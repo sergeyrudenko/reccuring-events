@@ -9,7 +9,11 @@ import {
 } from 'class-validator';
 
 import { InstanceExceptionType } from '../../constants/instance-exception-types';
-import { ICreateEventInstances, IUpdateEvent } from './calendar.interface';
+import {
+  ICreateEventInstances,
+  IEventInstance,
+  IUpdateEvent,
+} from './calendar.interface';
 
 class EventInstanceExceptionDto implements ICreateEventInstances {
   @IsDefined()
@@ -32,4 +36,20 @@ export class UpdateEventDto implements IUpdateEvent {
   @IsOptional()
   @IsDateString()
   startDate?: string;
+}
+
+export class GetEventInstancesInPeriodDto {
+  @IsDefined()
+  @IsDateString()
+  dateFrom: string;
+
+  @IsDefined()
+  @IsDateString()
+  dateTo: string;
+
+  bom: string;
+}
+export class EventInstancesInPeriodDto implements IEventInstance {
+  eventId: string;
+  instanceTimestamp: number;
 }
